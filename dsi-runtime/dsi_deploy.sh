@@ -2,8 +2,9 @@
 
 # This script deploys a DSI solution to a DSI runtime server.
 #
-# The first argument is the hostname of the DSI Runtime.
-# The second argument is the path to the .ESA file containing the DSI solution.
+# DSI_HOSTNAME: hostname of the DSI server.
+# DSI_PORT: port of the DSI server.
+# ESA: the path to the .ESA file containing the DSI solution.
 
 set -e
 
