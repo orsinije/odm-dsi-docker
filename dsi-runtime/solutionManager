@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+DSI_HOME_BIN="/opt/dsi/runtime/ia/bin"
+
+export JAVA_HOME=/opt/dsi/jdk/jre
+
+echo "JAVA_HOME=$JAVA_HOME" > /opt/dsi/runtime/wlp/etc/server.env
+
+$DSI_HOME_BIN/solutionManager $*

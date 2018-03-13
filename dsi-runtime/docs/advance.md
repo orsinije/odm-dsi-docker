@@ -3,7 +3,7 @@
 ## Deployment of a DSI solution from Docker
 
 It is possible to deploy a solution by using the `solutionManager` script
-from a DSI runtime container. It avoids the need to have installed DSI
+from a DSI runtime container. It avoids the need to have an installation of DSI
 on the machine where is the .ESA file.
 
 First, copies the .ESA file `mysol.esa` to a directory `mylocaldropins`
@@ -11,7 +11,7 @@ First, copies the .ESA file `mysol.esa` to a directory `mylocaldropins`
 Then the `solutionManager` script can be ran with:
 
 ```
-docker run -ti -v /mylocaldropins:/dropins -e SOL_MANAGER_OPTS="--sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester" dsi-runtime /dsi_deploy.sh dsi.hostname 9443  /dropins/mysol.esa
+docker run -ti -v /mylocaldropins:/dropins dsi-runtime /solutionManager deploy remote /dropins/mysol.esa --host=dsi.hostname --port=9443 --sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester
 ```
 
 ## Container parameter customization using docker-compose
