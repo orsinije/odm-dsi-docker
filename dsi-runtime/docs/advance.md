@@ -14,6 +14,8 @@ Then the `solutionManager` script can be ran with:
 docker run -ti -v /mylocaldropins:/dropins dsi-runtime /dsi-cmd solutionManager deploy remote /dropins/mysol.esa --host=dsi.hostname --port=9443 --sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester
 ```
 
+The `dsi-cmd` script can be used to run any usual DSI CLI (`solutionManager`, `propertyManager`, etc.) direcly from a Docker container.
+
 ## Container parameter customization using docker-compose
 
 DSI containers can be customized with specific parameters specified in `.env` file when running docker-compose.
