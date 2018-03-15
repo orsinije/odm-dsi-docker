@@ -11,7 +11,7 @@ First, copies the .ESA file `mysol.esa` to a directory `mylocaldropins`
 Then the `solutionManager` script can be ran with:
 
 ```
-docker run -ti -v /mylocaldropins:/dropins dsi-runtime /solutionManager deploy remote /dropins/mysol.esa --host=dsi.hostname --port=9443 --sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester
+docker run -ti -v /mylocaldropins:/dropins dsi-runtime /dsi-cmd solutionManager deploy remote /dropins/mysol.esa --host=dsi.hostname --port=9443 --sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester
 ```
 
 ## Container parameter customization using docker-compose

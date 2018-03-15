@@ -8,4 +8,4 @@ export JAVA_HOME=/opt/dsi/jdk/jre
 
 echo "JAVA_HOME=$JAVA_HOME" > /opt/dsi/runtime/wlp/etc/server.env
 
-$DSI_HOME_BIN/solutionManager $*
+$DSI_HOME_BIN/$1 ${@:2}
