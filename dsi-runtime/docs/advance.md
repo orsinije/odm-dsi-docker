@@ -35,15 +35,7 @@ The preferred way to persist data in docker is to use volumes (https://docs.dock
 
 To avoid the need to redeploy a solution after a container is restarted, a Docker volume can be used to store the DSI data.
 
-First, create a volume:
-```sh
-docker volume create --name dsi-runtime-volume
-```
-
-Run a Docker container using this volume to store the DSI files:
-```sh
-docker run -p9443:9443 -v dsi-runtime-volume:/opt/dsi/runtime/wlp --name dsi-runtime dsi-runtime
-```
+Running `docker-compose up dsi-runtime` will create a volume `dsiruntime_volume-solutions`.
 
 Deploy the solution in the running container:
 ```sh
