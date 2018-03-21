@@ -14,8 +14,6 @@ fi
 
 SRC_DIR=`dirname $0`
 SRC_DIR=`realpath $SRC_DIR`
-ESA="$SRC_DIR/simple_solution-0.0.esa"
-INCONN="$SRC_DIR/in-connectivity-server-configuration.xml"
 
 SOL_MANAGER_OPTS="--sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester"
 
