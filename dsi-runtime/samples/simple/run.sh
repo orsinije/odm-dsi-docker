@@ -5,6 +5,11 @@ function isonline() {
         docker-compose run dsi-runtime /dsi-cmd serverManager isonline $SOL_MANAGER_OPTS
 }
 
+function isSolutionReady() {
+        SOL_MANAGER_OPTS="--host=$1 --sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester"
+        docker-compose run dsi-runtime /dsi-cmd solutionManager isready simple_solution $SOL_MANAGER_OPTS
+}
+
 SRC_DIR=`dirname $0`
 SAMPLES_DIR=$SRC_DIR/..
 
@@ -30,7 +35,16 @@ done
 echo "Deploys solution"
 $SRC_DIR/solution_deploy.sh $DSI_IP 9443
 
-echo "Waiting 30s to ensure that the solution and the connectivity configuration are deployed"
+# waiting the solution to be ready
+until [ "$ISSOLREADY" == "1" ]
+do
+        echo "Waiting 5s before checking that the solution is ready"
+        sleep 5
+        ISSOLREADY=`isSolutionReady $DSI_IP >/dev/null && echo 1 || echo 0`
+        echo "Is solution ready result: $ISSOLREADY"
+done
+
+# waiting the connectivity to be ready
 sleep 30
 
 echo "Create a person"
