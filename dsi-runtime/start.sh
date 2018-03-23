@@ -46,6 +46,7 @@ fi
 echo "The DSI template $DSI_TEMPLATE is going to be used."
 
 SRV_XML="/opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/server.xml"
+GRID_DEPLOYMENT="/opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/grids/objectGridDeployment.xml"
 
 INTERNAL_IP=`hostname -I| sed 's/ //g'`
 
@@ -74,11 +75,16 @@ if [ ! -f "$SRV_XML" ]; then
         if [ ! -z "$DSI_JPROFILER" ]; then
                 jprofile_enable
         fi
+
+        if [ ! -z "$DSI_PARTITIONS_COUNT" ]; then
+                echo "Update DSI_PARTITIONS_COUNT to $DSI_PARTITIONS_COUNT"
+                sed -i "s/numberOfPartitions=\"[0-9]*\"/numberOfPartitions=\"$DSI_PARTITIONS_COUNT\"/g" "$GRID_DEPLOYMENT"
+        fi
 else
         echo "$SRV_XML already exist"
 fi
 
-if [ ! -z "$DSI_CATALOG_HOSTNAME" ]; then
+if [[ ! -z "$DSI_CATALOG_HOSTNAME" && -f "$GRID_DEPLOYMENT" ]]; then
         BOOTSTRAP_FILE=/opt/dsi/runtime/wlp/usr/servers/$DSI_TEMPLATE/bootstrap.properties
         echo "Modifying $BOOTSTRAP_FILE"
         sed -i "s/ia.bootstrapEndpoints=localhost:2809/ia.bootstrapEndpoints=$DSI_CATALOG_HOSTNAME:2809/g" $BOOTSTRAP_FILE
@@ -100,7 +106,7 @@ if [ ! -z "$3" ]; then
          RUNTIME_HOSTNAME="$3"
          while true ; do
                  echo Testing availability of grid on runtime server $RUNTIME_HOSTNAME before starting connectivity container
-                 GRID_ONLINE=`/opt/dsi/runtime/ia/bin/serverManager isonline --host=$RUNTIME_HOSTNAME --disableSSLHostnameVerification=true --disableServerCertificateVerification=true | egrep "is online" | wc -l` 
+                 GRID_ONLINE=`/opt/dsi/runtime/ia/bin/serverManager isonline --host=$RUNTIME_HOSTNAME --disableSSLHostnameVerification=true --disableServerCertificateVerification=true | egrep "is online" | wc -l`
                  if [ "$GRID_ONLINE" -eq 1 ]; then
                          break
                  fi
@@ -114,6 +120,11 @@ echo "The IP of the DSI server is $INTERNAL_IP"
 if [ -f "$BOOTSTRAP_FILE" ]; then
         sed -i "s/ia\.host\=localhost/ia\.host\=$INTERNAL_IP/" $BOOTSTRAP_FILE
         echo "Internal IP: $INTERNAL_IP"
+fi
+
+if [ "$LOGGING_TRACE_SPECIFICATION" !=  "" ] ; then
+        echo updating traceSpecification with $LOGGING_TRACE_SPECIFICATION
+        sed -i "s/traceSpecification=\".*\"/traceSpecification=$LOGGING_TRACE_SPECIFICATION/" $SRV_XML
 fi
 
 /opt/dsi/runtime/wlp/bin/server run $DSI_TEMPLATE

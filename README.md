@@ -6,13 +6,13 @@ This page shows you how to run a single DSI Runtime on Docker. For some addition
 
 You can use the provided materials on MacOS or Ubuntu 16.04 LTS 64-bit. And you can use any Linux VM with a recent version of Docker.
 Before you start, make sure you have installed the following software:
-* [IBM ODM Decision Server Insights V8.9.1](https://www.ibm.com/support/knowledgecenter/en/SSQP76_8.9.1/com.ibm.odm.itoa/topics/odm_itoa.html)
+* [IBM ODM Decision Server Insights V8.9.2](https://www.ibm.com/support/knowledgecenter/en/SSQP76_8.9.2/com.ibm.odm.itoa/topics/odm_itoa.html)
 * [Docker 17.09](https://www.docker.com/what-docker)
 * Curl 7.47.0
 * Docker Compose 1.17
 
 Note: To be able to create the Docker image you must have an installation of IBM ODM
-Decision Server Insights V8.9.1.
+Decision Server Insights V8.9.2.
 
 OK, let's continue...
 
@@ -33,7 +33,7 @@ git clone https://github.com/ODMDev/odm-dsi-docker.git
 In the following document:
  * `DSI_DOCKER_GIT` designates the directory containing the working copy of
    this GIT repository.
- * `DSI_HOME` designates the directory containing the installation of ODM DSI V8.9.1.
+ * `DSI_HOME` designates the directory containing the installation of ODM DSI V8.9.2.
 
 ### Create the Docker image
 
@@ -57,20 +57,19 @@ The command `docker images` can be used to verify that the image is now listed i
 
 On MacOS the build of the image will use the IBM JDK from the 'ibmjava' image, which might be different to the one supported by DSI Runtime.
 
-The name of this image will be dsi-runtime-ibmjava instead of dsi-runtime, it will
-require to adapt accordingly the scripts and commands for running a DSI container.
+The name of this image will be `dsi-runtime-ibmjava` instead of `dsi-runtime`.
+Before using docker-compose, you will need to set environment variable `DSI_IMAGE` to `dsi-runtime-ibmjava` in `.env` file.
 
 In order to run containers or clusters on MacOS it is strongly advised to increase default values of CPU and memory in Docker menu `Preferences>Advanced`.
-Docker memory setting should be consistent with DSI container max memory heap (`-Xmx`) and actual memory use. 
+Docker memory setting should be consistent with DSI container max memory heap (`-Xmx`) and actual memory use.
 With default templates, we recommend at least 2Gb for each dsi-runtime-ibmjava container.
 
 ## Run a single DSI runtime with Docker Compose
 
 ```sh
-docker-compose up dsi-runtime
+cd $DSI_DOCKER_GIT/dsi-runtime
+docker-compose up
 ```
-
-`dsi-runtime` is the name of the service defined in the yaml file.
 
 When DSI is started, the output ends with the following lines:
 ```
@@ -92,16 +91,24 @@ To change host ports, change `HTTP_PORT` and `HTTPS_PORT` variables in the `.env
 To deploy a solution and the connectivity configuration,
 the usual command line tools `solutionManager` and `connectivityManager` can be used.
 
-The sample script `solution_deploy.sh` can also be used to deploy a simple test solution and its connectivity configuration.
+In order to avoid using a DSI installation, it is also possible to deploy the
+solution by using a DSI runtime container. For more information see [advance.md](dsi-runtime/docs/advance.md).
+This is the way used by the script `solution_deploy.sh`
+
 In a separate command shell to the one you used to run the DSI container:
 ```sh
 cd $DSI_DOCKER_GIT/dsi-runtime/samples/simple
-./solution_deploy.sh $DSI_HOME localhost 9443
+./solution_deploy.sh $DSI_IP $DSI_PORT
 ```
 
-The first argument is the path to the installation directory of DSI.
-The second argument is the hostname of the DSI runtime.
-The third argument is the port of the DSI Runtime.
+The first argument `DSI_IP` is the IP address or the hostname of the DSI
+Runtime.
+As the DSI client is ran from the Docker container, `localhost` or the loopback
+address cannot be used. `docker inspect` can be used to determine the IP of
+the Docker container.
+
+The second argument `DSI_PORT` is the port of the DSI Runtime. By default,
+it is `9443`.
 
 The output of the command line should be similar to:
 ```
