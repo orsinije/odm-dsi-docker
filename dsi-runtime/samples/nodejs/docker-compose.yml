@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+        dsi-runtime:
+                image: dsi-runtime
+                hostname: dsi-runtime
+                domainname: dsi
+                ports:
+                        - "${HTTP_PORT}:9080"
+                        - "${HTTPS_PORT}:9443"
+                command: ["/root/start.sh", $DSI_TEMPLATE]
+                environment:
+                        - LOGGING_TRACE_SPECIFICATION=$LOGGING_TRACE_SPECIFICATION
+                        - DSI_PARTITIONS_COUNT=$DSI_PARTITIONS_COUNT
