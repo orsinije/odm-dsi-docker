@@ -14,3 +14,5 @@ services:
                         - DSI_PARTITIONS_COUNT=$DSI_PARTITIONS_COUNT
         nodejs-in:
                 image: nodejs-in
+                ports:
+                        - "8080:8080"
