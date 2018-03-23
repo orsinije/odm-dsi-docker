@@ -12,3 +12,5 @@ services:
                 environment:
                         - LOGGING_TRACE_SPECIFICATION=$LOGGING_TRACE_SPECIFICATION
                         - DSI_PARTITIONS_COUNT=$DSI_PARTITIONS_COUNT
+        nodejs-in:
+                image: nodejs-in
