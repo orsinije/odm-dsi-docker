@@ -12,7 +12,7 @@ services:
                 environment:
                         - LOGGING_TRACE_SPECIFICATION=$LOGGING_TRACE_SPECIFICATION
                         - DSI_PARTITIONS_COUNT=$DSI_PARTITIONS_COUNT
-        nodejs-in:
-                image: nodejs-in
+        nodejs-bridge:
+                image: nodejs-bridge
                 ports:
                         - "8080:8080"

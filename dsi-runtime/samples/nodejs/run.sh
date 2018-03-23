@@ -2,6 +2,6 @@
 
 set -e
 
-docker build -t nodejs-in .
+docker build -t nodejs-bridge .
 
 docker-compose up
