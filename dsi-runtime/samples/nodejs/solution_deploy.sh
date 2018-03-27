@@ -17,15 +17,11 @@ SRC_DIR=`realpath $SRC_DIR`
 
 SOL_MANAGER_OPTS="--sslProtocol=TLSv1.2 --disableServerCertificateVerification=true --disableSSLHostnameVerification=true --username=tester --password=tester"
 
-echo "Deploying solution to $DSI_IP"
-
-SOL_DIR=`realpath $SRC_DIR/../simple`
+SOL_DIR=`realpath $SRC_DIR`
 echo "Directory containing the solution: $SOL_DIR"
 
-cd $SRC_DIR
-
-echo "Deploy to DSI: $DSI_IP:$DSI_PORT"
-
+echo "Deploy solution to DSI: $DSI_IP:$DSI_PORT"
 docker-compose run -v $SOL_DIR:/dropins dsi-runtime /dsi-cmd solutionManager deploy remote /dropins/simple_solution-0.0.esa --host=$DSI_IP --port=$DSI_PORT $SOL_MANAGER_OPTS
 
-docker-compose run -v $SOL_DIR:/dropins dsi-runtime /dsi-cmd connectivityManager deploy remote /dropins/simple_solution-0.0.esa /dropins/in-connectivity-server-configuration.xml --host=$DSI_IP --port=$DSI_PORT $SOL_MANAGER_OPTS
+echo "Deploy connectivity to DSI: $DSI_IP:$DSI_PORT from directory $CONN_DIR"
+docker-compose run -v $SOL_DIR:/dropins dsi-runtime /dsi-cmd connectivityManager deploy remote /dropins/simple_solution-0.0.esa /dropins/connectivity-server-configuration.xml --host=$DSI_IP --port=$DSI_PORT $SOL_MANAGER_OPTS

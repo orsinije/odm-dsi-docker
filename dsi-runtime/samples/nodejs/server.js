@@ -8,10 +8,11 @@ const PORT = 8080;
 const HOST = '0.0.0.0';
 
 const DSI_HOST = "dsi-runtime";
+const DSI_IN_URL = "https://" + DSI_HOST + ":9443/in/simple";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-function createEvent(name) {
+function createEventNew(name) {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                + "<m:CreatePerson xmlns:m=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model ../xsd/namespace1/model.xsd \">"
                + "<m:name>" + name + "</m:name>"
@@ -20,16 +21,23 @@ function createEvent(name) {
                + "</m:CreatePerson>";
 }
 
-function sendEvent(url, name) {
-        console.log("POST to " + url);
+function createEventHello(name) {
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+               + "<m:SayHello xmlns:m=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model ../xsd/namespace1/model.xsd \">"
+               + "<m:person>" + name + "</m:person>"
+               + "<m:description>"
+               + "</m:description>"
+               + "</m:SayHello>";
+}
 
+function sendEvent(evt) {
         request.post({
-                        url: url,
+                        url: DSI_IN_URL,
                         method: 'POST',
                         headers: {
                                 'Content-Type' : 'application/xml'
                         },
-                        body: createEvent(name)
+                        body: evt
                       },
                       function (err, response, body) {
                               console.log("Reponse: " + response.statusCode);
@@ -49,10 +57,18 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.post('/create-person', (req, res) => {
-        var url = "https://" + DSI_HOST + ":9443/in/simple";
-
-        sendEvent(url, req.body.name);
+        sendEvent(createEventNew(req.body.name));
         res.send("Created person: " + req.body.name);
+});
+
+app.post('/say-hello', (req, res) => {
+        sendEvent(createEventHello(req.body.name));
+        res.send("Say hello to: " + req.body.name);
+});
+
+app.post("/out", (req, res) => {
+        console.log("receive: " + req.body);
+        res.end("yes");
 });
 
 app.listen(PORT, HOST);
