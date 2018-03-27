@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+- cd dsi-runtime
+- docker-compose config
+- cd samples/cluster
+- docker-compose config
