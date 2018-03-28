@@ -2,6 +2,7 @@
 
 const express = require('express');
 const request = require('request');
+const bodyParser = require('body-parser')
 
 // Constants
 const PORT = 8080;
@@ -31,6 +32,8 @@ function createEventHello(name) {
 }
 
 function sendEvent(evt) {
+        console.log("Sending event to DSI");
+
         request.post({
                         url: DSI_IN_URL,
                         method: 'POST',
@@ -67,7 +70,7 @@ app.post('/say-hello', (req, res) => {
 });
 
 app.post("/out", (req, res) => {
-        console.log("receive: " + req.body);
+        console.log("receive event: " + JSON.stringify(req.body));
         res.end("yes");
 });
 
