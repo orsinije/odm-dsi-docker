@@ -2,7 +2,6 @@
 
 const express = require('express');
 const request = require('request');
-const bodyParser = require('body-parser')
 
 // Constants
 const PORT = 8080;
@@ -54,25 +53,31 @@ function sendEvent(evt) {
 }
 
 const app = express();
-
 app.use(express.static('pub'));
 app.use(express.json());
-app.use(express.urlencoded());
 
-app.post('/create-person', (req, res) => {
+
+var  http = require('http')
+    , server = http.createServer(app)
+    , io = require('socket.io').listen(server);
+
+io.on('connect', function () {});
+
+app.post('/create-person', function(req, res) {
         sendEvent(createEventNew(req.body.name));
         res.send("Created person: " + req.body.name);
 });
 
-app.post('/say-hello', (req, res) => {
+app.post('/say-hello', function(req, res) {
         sendEvent(createEventHello(req.body.name));
         res.send("Say hello to: " + req.body.name);
 });
 
-app.post("/out", (req, res) => {
-        console.log("receive event: " + JSON.stringify(req.body));
-        res.end("yes");
+app.post("/out", function (req, res) {
+    io.sockets.emit('event', JSON.stringify(req.body));
+    res.status(200).end();
 });
 
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+server.listen(PORT, HOST, function () {
+    console.log("Running on http://%s:%s", HOST, PORT);
+});

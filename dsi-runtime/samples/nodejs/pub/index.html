@@ -2,6 +2,16 @@
         <head>
                 <meta charset="utf-8" />
                 <title>DSI sample</title>
+
+                <script src="socket.io.js"></script>
+                <script>
+                        var socket = io.connect('http://localhost:8080');
+
+                        socket.on('event', function (message) {
+                                document.getElementById("displayEvent").innerHTML = JSON.stringify(JSON.parse(message), undefined, 2);
+                        });
+
+                </script>
         </head>
         <body>
                 <h1>DSI sample</h1>
@@ -9,8 +19,8 @@
                 <h2>Register a new person:</h2>
                 <form action="/create-person" method="post">
                         <fieldset>
-                                <label for="name">Name:</label>
-                                <input type="text" id="name" name="name" placeholder="Enter the name" />
+                                <label for="create_name">Name:</label>
+                                <input type="text" id="create_name" name="name" placeholder="Enter the name" />
                                 <input type="submit" />
                         </fieldset>
                 </form>
@@ -23,6 +33,9 @@
                                 <input type="submit" />
                         </fieldset>
                 </form>
+                
+                <h2>Event received:</h2>
+                <pre id="displayEvent" />
 
         </body>
 </html>
