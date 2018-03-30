@@ -56,11 +56,7 @@ function sendEvent(evt) {
 const app = express();
 app.use(express.static('pub'));
 app.use(express.json());
-<<<<<<< HEAD
-app.use(express.urlencoded());
-=======
 app.use(bodyParser.json());
->>>>>>> b898eab6ef53e6468fc33e613b5b2115034d2000
 
 var  http = require('http')
     , server = http.createServer(app)
