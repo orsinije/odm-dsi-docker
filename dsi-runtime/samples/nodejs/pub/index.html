@@ -3,41 +3,51 @@
                 <meta charset="utf-8" />
                 <title>DSI sample</title>
 
-                <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+                <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+                <script src="/socket.io/socket.io.js"></script>
 
                 <script>
-                        $(document).ready(function(){
+                        $(document).ready(function() {
+                                var socket = io.connect('http://localhost:8080');
+
+                                socket.on('event', function (message) {
+                                        console.log("received message: " + message);
+                                        $('#displayEvent').prepend('<pre>'+JSON.stringify(JSON.parse(message), undefined, 2)+'</pre>');
+                                });
+
+                                socket.on('message', function (message) {
+                                        console.log("received message: " + message);
+                                        document.getElementById("message").innerHTML = message;
+                                });
+
                                 var $form = $('form');
                                 $form.submit(function(){
                                         console.log("post");
-                                        $.post($(this).attr('action'), $(this).serialize(), function(response){
-                                        },'json');
+                                        $.post($(this).attr('action'),
+                                               $(this).serialize(),
+                                               function(response) { },
+                                               'json');
                                         console.log("post done");
                                         return false;
                                 });
                                 console.log("document ready");
                         });
                 </script>
-
-                <script src="/socket.io/socket.io.js"></script>
-                <script>
-                        var socket = io.connect('http://localhost:8080');
-
-                        socket.on('event', function (message) {
-                                document.getElementById("displayEvent").innerHTML = JSON.stringify(JSON.parse(message), undefined, 2);
-                        });
-
-                </script>
         </head>
         <body>
                 <h1>DSI sample</h1>
 
+                <div>
+                        <h2 id="message" style="color: darkgreen"></h2>
+                </div>
+
                 <h2>Register a new person:</h2>
+
                 <form action="/create-person">
                         <fieldset>
                                 <label for="create_name">Name:</label>
                                 <input type="text" id="create_name" name="name" placeholder="Enter the name" />
-                                <input type="submit" />
+                                <input type="submit" id="createperson" />
                         </fieldset>
                 </form>
 
@@ -46,12 +56,11 @@
                         <fieldset>
                                 <label for="name">Name:</label>
                                 <input type="text" id="name" name="name" placeholder="Enter the name" />
-                                <input type="submit" />
+                                <input type="submit" id="sayHello" />
                         </fieldset>
                 </form>
 
                 <h2>Event received:</h2>
                 <pre id="displayEvent" />
-
         </body>
 </html>
