@@ -2,6 +2,8 @@
 
 const express = require('express');
 const request = require('request');
+const bodyParser = require('body-parser');
+var Promise = require('promise');
 
 // Constants
 const PORT = 8080;
@@ -32,24 +34,30 @@ function createEventHello(name) {
 
 function sendEvent(evt) {
         console.log("Sending event to DSI: " + evt);
-
+    return new Promise(function(resolve) {
         request.post({
-                        url: DSI_IN_URL,
-                        method: 'POST',
-                        headers: {
-                                'Content-Type' : 'application/xml'
-                        },
-                        body: evt
-                      },
-                      function (err, response, body) {
-                              console.log("Reponse: " + response.statusCode);
-                              if (err) {
-                                      console.log(err);
-                                      console.log(response);
-                                      console.log(body.url);
-                                      console.log(body.explanation);
-                              }
-                      });
+                url: DSI_IN_URL,
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/xml'
+                },
+                body: evt
+            },
+            function (err, response, body) {
+                if (err) {
+                    console.log(err);
+                    console.log(response);
+                    if(body){
+                        console.log(body.url);
+                        console.log(body.explanation);
+                    }
+                    resolve(false);
+                } else {
+                    console.log("Reponse: " + response.statusCode);
+                    resolve(true);
+                }
+            });
+    });
 }
 
 const app = express();
@@ -63,17 +71,22 @@ var  http = require('http')
     , server = http.createServer(app)
     , io = require('socket.io').listen(server);
 
-io.on('connect', function () {});
+io.on('connect', function (socket) {
+    socket.on('create_name', function (name) {
+        sendEvent(createEventNew(name)).then(function (status) {
+            var msg = (status) ? 'Created person: ' + name : 'Failed to create person :' + name;
+            console.log(msg);
+            socket.emit('message', msg);
+        });
+    });
 
-app.post('/create-person', function(req, res) {
-        console.log("Create person: " + req.body.create_name);
-        sendEvent(createEventNew(req.body.name));
-        res.send("Created person: " + req.body.name);
-});
-
-app.post('/say-hello', function(req, res) {
-        sendEvent(createEventHello(req.body.name));
-        res.send("Say hello to: " + req.body.name);
+    socket.on('say-hello', function (name) {
+        sendEvent(createEventHello(name)).then(function (status) {
+            var msg = (status) ? 'Say hello to: ' + name : ' Failed to say hello to: ' + name;
+            console.log(msg);
+            socket.emit('message', msg);
+        });
+    });
 });
 
 app.post("/out", function (req, res) {
@@ -82,5 +95,5 @@ app.post("/out", function (req, res) {
 });
 
 server.listen(PORT, HOST, function () {
-    console.log("Running on http://%s:%s", HOST, PORT);
+    console.log('Running on http://%s:%s', HOST, PORT);
 });

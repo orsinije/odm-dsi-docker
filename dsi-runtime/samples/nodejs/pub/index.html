@@ -2,40 +2,52 @@
         <head>
                 <meta charset="utf-8" />
                 <title>DSI sample</title>
-
+                <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
                 <script src="/socket.io/socket.io.js"></script>
                 <script>
                         var socket = io.connect('http://localhost:8080');
 
                         socket.on('event', function (message) {
-                                document.getElementById("displayEvent").innerHTML = JSON.stringify(JSON.parse(message), undefined, 2);
+                                $('#displayEvent').prepend('<pre>'+JSON.stringify(JSON.parse(message), undefined, 2)+'</pre>');
                         });
 
+                        socket.on('message', function (message) {
+                                document.getElementById("message").innerHTML = message;
+                        });
+
+                        $('#createperson').click(function () {
+                                socket.emit('create_name', document.getElementById("create_name").value);
+                        });
+
+                        $('#sayHello').click(function () {
+                                socket.emit('say-hello', document.getElementById("name").value);
+                        });
                 </script>
         </head>
         <body>
                 <h1>DSI sample</h1>
 
+                <div>
+                        <h2 id="message" style="color: darkgreen"></h2>
+                </div>
+
                 <h2>Register a new person:</h2>
-                <form action="/create-person" method="post">
                         <fieldset>
                                 <label for="create_name">Name:</label>
                                 <input type="text" id="create_name" name="name" placeholder="Enter the name" />
-                                <input type="submit" />
+                                <input type="submit" id="createperson" />
                         </fieldset>
-                </form>
+
 
                 <h2>Say hello:</h2>
-                <form action="/say-hello" method="post">
                         <fieldset>
                                 <label for="name">Name:</label>
                                 <input type="text" id="name" name="name" placeholder="Enter the name" />
-                                <input type="submit" />
+                                <input type="submit" id="sayHello" />
                         </fieldset>
-                </form>
+
 
                 <h2>Event received:</h2>
                 <pre id="displayEvent" />
-
         </body>
 </html>
