@@ -3,7 +3,7 @@
                 <meta charset="utf-8" />
                 <title>DSI sample</title>
 
-                <script src="socket.io.js"></script>
+                <script src="../node_modules/socket.io-client/dist/socket.io.js"></script>
                 <script>
                         var socket = io.connect('http://localhost:8080');
 
@@ -33,7 +33,7 @@
                                 <input type="submit" />
                         </fieldset>
                 </form>
-                
+
                 <h2>Event received:</h2>
                 <pre id="displayEvent" />
 
