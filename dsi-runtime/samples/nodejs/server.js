@@ -2,6 +2,7 @@
 
 const express = require('express');
 const request = require('request');
+const bodyParser = require('body-parser');
 
 // Constants
 const PORT = 8080;
@@ -55,7 +56,7 @@ function sendEvent(evt) {
 const app = express();
 app.use(express.static('pub'));
 app.use(express.json());
-
+app.use(bodyParser.json());
 
 var  http = require('http')
     , server = http.createServer(app)
