@@ -64,30 +64,32 @@ const app = express();
 app.use(express.static('pub'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: true
+        extended: true
 }));
 
 var  http = require('http')
     , server = http.createServer(app)
     , io = require('socket.io').listen(server);
 
-io.on('connect', function (socket) {
-    socket.on('create_name', function (name) {
-        sendEvent(createEventNew(name)).then(function (status) {
-            var msg = (status) ? 'Created person: ' + name : 'Failed to create person :' + name;
-            console.log(msg);
-            socket.emit('message', msg);
-        });
-    });
+app.post("/create-person",
+         function (req, res) {
+                 sendEvent(createEventNew(req.body.name)).then(function (status) {
+                         var msg = (status) ? 'Created person: ' + name : 'Failed to create person :' + name;
+                         console.log(msg);
+                         socket.emit('message', msg);
+                 });
+                 res.status(200).end();
+         });
 
-    socket.on('say-hello', function (name) {
-        sendEvent(createEventHello(name)).then(function (status) {
-            var msg = (status) ? 'Say hello to: ' + name : ' Failed to say hello to: ' + name;
-            console.log(msg);
-            socket.emit('message', msg);
+app.post("/say-hello",
+         function (req, res) {
+                sendEvent(createEventHello(req.body.name)).then(function (status) {
+                        var msg = (status) ? 'Say hello to: ' + name : ' Failed to say hello to: ' + name;
+                        console.log(msg);
+                        socket.emit('message', msg);
+                });
+                res.status(200).end();
         });
-    });
-});
 
 app.post("/out", function (req, res) {
     io.sockets.emit('event', JSON.stringify(req.body));
