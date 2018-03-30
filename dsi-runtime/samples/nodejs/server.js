@@ -67,16 +67,16 @@ app.use(bodyParser.urlencoded({
         extended: true
 }));
 
-var  http = require('http')
+var http = require('http')
     , server = http.createServer(app)
     , io = require('socket.io').listen(server);
 
 app.post("/create-person",
          function (req, res) {
                  sendEvent(createEventNew(req.body.name)).then(function (status) {
-                         var msg = (status) ? 'Created person: ' + name : 'Failed to create person :' + name;
-                         console.log(msg);
-                         socket.emit('message', msg);
+                         var msg = (status) ? 'Created person: ' + req.body.name : 'Failed to create person :' + req.body.name;
+                         console.log("Emit: " + msg);
+                         io.sockets.emit('message', msg );
                  });
                  res.status(200).end();
          });
@@ -84,9 +84,9 @@ app.post("/create-person",
 app.post("/say-hello",
          function (req, res) {
                 sendEvent(createEventHello(req.body.name)).then(function (status) {
-                        var msg = (status) ? 'Say hello to: ' + name : ' Failed to say hello to: ' + name;
-                        console.log(msg);
-                        socket.emit('message', msg);
+                        var msg = (status) ? 'Said hello to: ' + req.body.name : ' Failed to say hello to: ' + req.body.name;
+                        console.log("Emit: " + msg);
+                        io.sockets.emit('message', msg);
                 });
                 res.status(200).end();
         });
