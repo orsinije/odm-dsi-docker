@@ -22,3 +22,23 @@ received from DSI.
 ## How it works
 
 ![Communication DSI NodeJS](./dsi_nodejs.png)
+
+### Send events from NodeJS to DSI
+
+The form in the [index.html](pub/index.html) file sends HTTP POST to the
+NodeJS application [server.js](./server.js).
+The javascript method `sendEvent` sends the event to DSI using the HTTP
+inbound connectivity feature.
+
+### Receive events in NodeJS from DSI
+
+DSI emits events through the HTTP oubound connectivity to the NodeJS
+application (endpoint `/out`). The javascript in [server.js](./server.js)
+send it back to the HTML page using WebSocket:
+
+```
+app.post("/out", function (req, res) {
+    io.sockets.emit('event', JSON.stringify(req.body));
+    res.status(200).end();
+});
+```
