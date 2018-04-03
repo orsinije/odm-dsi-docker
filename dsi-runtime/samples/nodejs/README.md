@@ -18,3 +18,7 @@ In order to run both the NodeJS application and DSI with Docker compose:
 Then open the URL: `http://localhost:8080`. It will present a very
 simple Web application for sending events to DSI and displaying the events
 received from DSI.
+
+## How it works
+
+[Communication DSI NodeJS](./dsi_nodejs.png)
