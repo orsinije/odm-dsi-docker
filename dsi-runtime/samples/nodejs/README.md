@@ -21,4 +21,4 @@ received from DSI.
 
 ## How it works
 
-[Communication DSI NodeJS](./dsi_nodejs.png)
+![Communication DSI NodeJS](./dsi_nodejs.png)
