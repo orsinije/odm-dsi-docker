@@ -5,7 +5,7 @@ and receive events from DSI by using the REST API.
 
 ## Prerequisites
 
-Build the docker image of DSI, see the [README.md](../../README.md).
+Build the docker image of DSI, see the [README.md](../../../README.md).
 
 ## Run NodeJS and DSI
 
