@@ -26,9 +26,8 @@ received from DSI.
 ### Send events from NodeJS to DSI
 
 The form in the [index.html](pub/index.html) file sends HTTP POST to the
-NodeJS application [server.js](./server.js).
-The javascript method `sendEvent` sends the event to DSI using the HTTP
-inbound connectivity feature.
+NodeJS application. In [server.js](./server.js), the method `sendEvent`
+sends the event to DSI using the HTTP inbound connectivity feature.
 
 ### Receive events in NodeJS from DSI
 
