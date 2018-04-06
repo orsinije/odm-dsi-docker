@@ -5,7 +5,6 @@ const request = require('request');
 const bodyParser = require('body-parser');
 var Promise = require('promise');
 
-// Constants
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
