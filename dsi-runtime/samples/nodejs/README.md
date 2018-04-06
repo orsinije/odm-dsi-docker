@@ -19,6 +19,15 @@ Then open the URL: `http://localhost:8080`. It will present a very
 simple Web application for sending events to DSI and displaying the events
 received from DSI.
 
+![Simple WebApp communicating with DSI](./dsi_nodejs_webapp.png)
+
+The first form (`Register a new person`) sends an event to DSI which will
+create an entity.
+
+The second form (`Say hello`) sends an event to DSI. Its processing by
+a Rule Agent emits a new event which is received by the WebApp and
+displayed after `Event received` in the HTML page.
+
 ## How it works
 
 ![Communication DSI NodeJS](./dsi_nodejs.png)
