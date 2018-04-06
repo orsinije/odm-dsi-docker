@@ -1,7 +1,7 @@
-# Communication between NodeJS and DSI
+# Communication between a Web Application and DSI using NodeJS
 
-This sample is showing how a NodeJS application can send events to DSI
-and receive events from DSI by using the REST API.
+This sample is showing how a Web application can send events to DSI
+and receive events from DSI by using the REST API and NodeJS.
 
 ## Prerequisites
 
@@ -25,15 +25,17 @@ received from DSI.
 
 ### Send events from NodeJS to DSI
 
-The form in the [index.html](pub/index.html) file sends HTTP POST to the
+The form in the [HTML page](pub/index.html) sends an HTTP POST to the
 NodeJS application. In [server.js](./server.js), the method `sendEvent`
-sends the event to DSI using the HTTP inbound connectivity feature.
+sends the event to DSI using its HTTP inbound connectivity feature.
 
 ### Receive events in NodeJS from DSI
 
 DSI emits events through the HTTP oubound connectivity to the NodeJS
-application (endpoint `/out`). The javascript in [server.js](./server.js)
-send it back to the HTML page using WebSocket:
+application using its HTTP endpoint `/out`.
+The NodeJS application in [server.js](./server.js) sends the event to
+the HTML page by using the
+[WebSocket API](https://www.w3.org/TR/websockets/):
 
 ```
 app.post("/out", function (req, res) {
