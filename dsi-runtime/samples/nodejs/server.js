@@ -38,22 +38,22 @@ function sendEvent(evt) {
                 url: DSI_IN_URL,
                 method: 'POST',
                 headers: {
-                    'Content-Type' : 'application/xml'
+                        'Content-Type' : 'application/xml'
                 },
                 body: evt
             },
             function (err, response, body) {
                 if (err) {
-                    console.log(err);
-                    console.log(response);
-                    if(body){
+                        console.log(err);
+                        console.log(response);
+                        if (body) {
                         console.log(body.url);
                         console.log(body.explanation);
-                    }
-                    resolve(false);
+                        }
+                        resolve(false);
                 } else {
-                    console.log("Reponse: " + response.statusCode);
-                    resolve(true);
+                        console.log("Reponse: " + response.statusCode);
+                        resolve(true);
                 }
             });
     });
@@ -70,16 +70,26 @@ var http = require('http')
     , server = http.createServer(app)
     , io = require('socket.io').listen(server);
 
+/**
+* This HTTP endpoint is called by the Web Application.
+* It sends an event to DSI through the HTTP inbound connectivity.
+* It will create a DSI entity 'simple.Person'.
+*/
 app.post("/create-person",
-         function (req, res) {
-                 sendEvent(createEventNew(req.body.name)).then(function (status) {
-                         var msg = (status) ? 'Created person: ' + req.body.name : 'Failed to create person :' + req.body.name;
-                         console.log("Emit: " + msg);
-                         io.sockets.emit('message', msg );
-                 });
-                 res.status(200).end();
-         });
+        function (req, res) {
+                sendEvent(createEventNew(req.body.name)).then(function (status) {
+                        var msg = (status) ? 'Created person: ' + req.body.name : 'Failed to create person :' + req.body.name;
+                        console.log("Emit: " + msg);
+                        io.sockets.emit('message', msg );
+                });
+                        res.status(200).end();
+        });
 
+/**
+ * This HTTP endpoint is called by the Web Application.
+ * It sends an event to DSI through the HTTP inbound connectivity.
+ * It will be processed by a Rule Agent which will emit a new event.
+ */
 app.post("/say-hello",
          function (req, res) {
                 sendEvent(createEventHello(req.body.name)).then(function (status) {
@@ -90,11 +100,16 @@ app.post("/say-hello",
                 res.status(200).end();
         });
 
+/**
+ * This HTTP endpoint is called by DSI.
+ * When an event is received it will send it as-is
+ * to the Web Application by using the WebSocket API.
+ */
 app.post("/out", function (req, res) {
-    io.sockets.emit('event', JSON.stringify(req.body));
-    res.status(200).end();
+        io.sockets.emit('event', JSON.stringify(req.body));
+        res.status(200).end();
 });
 
 server.listen(PORT, HOST, function () {
-    console.log('Running on http://%s:%s', HOST, PORT);
+        console.log('Running on http://%s:%s', HOST, PORT);
 });
