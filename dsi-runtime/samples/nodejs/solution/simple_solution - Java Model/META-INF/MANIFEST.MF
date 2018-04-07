@@ -1,13 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: simple_solution.modelExecutable
+Bundle-Name: simple_solution - Java Model
 Bundle-SymbolicName: simple_solution.modelExecutable
 Bundle-Version: 0.0.0.qualifier
+Bundle-ClassPath: model.jar
 Export-Package: com.ibm.rules.generated;version="0.0.0.qualifier",
  com.ibm.rules.generated.dataie;version="0.0.0.qualifier",
  com.ibm.rules.generated.xml;version="0.0.0.qualifier",
  simple;version="0.0.0.qualifier",
  simple.impl;version="0.0.0.qualifier"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.ibm.geolib.crs;version="[1.4.0,1.5.0)",
  com.ibm.geolib.unit;version="[1.4.0,1.5.0)",
  com.ibm.ia.engine.dataie.event;version="[1.4.0,1.5.0)",
@@ -41,4 +43,3 @@ Import-Package: com.ibm.geolib.crs;version="[1.4.0,1.5.0)",
  ilog.rules.util.issue;version="[1.4.0,1.5.0)",
  javax.xml.namespace,
  org.xml.sax
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8

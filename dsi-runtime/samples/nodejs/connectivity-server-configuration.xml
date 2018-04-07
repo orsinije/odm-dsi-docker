@@ -9,4 +9,6 @@
     <ia_inboundHttpEndpoint endpoint="simple_solution/endin"/>
 
     <ia_outboundHttpEndpoint endpoint="simple_solution/HTTPTransactionOutputEndPoint" url="http://nodejs-bridge:8080/out"/>
+
+    <ia_outboundHttpEndpoint endpoint="simple_solution/endout" url="http://nodejs-bridge:8080/out"/>
 </server>
