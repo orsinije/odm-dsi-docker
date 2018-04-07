@@ -33,7 +33,8 @@ function createEventHello(name) {
 
 function sendEvent(evt) {
         console.log("Sending event to DSI: " + evt);
-    return new Promise(function(resolve) {
+
+        return new Promise(function(resolve) {
         request.post({
                 url: DSI_IN_URL,
                 method: 'POST',
