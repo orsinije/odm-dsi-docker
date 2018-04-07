@@ -8,5 +8,7 @@ when a sayHello occurs
 then
 print "Hello " + the name of the person of this sayHello ; 
 emit a new message where 
-	the name is the name of the person of this sayHello ;]]></definition>
+	the description is "hello" , 	
+	the person is the person of this sayHello ;
+]]></definition>
 </com.ibm.ia.designer.berl:BerlRule>

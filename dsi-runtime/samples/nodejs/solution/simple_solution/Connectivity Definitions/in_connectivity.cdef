@@ -3,7 +3,7 @@ define inbound binding 'in'
 with description "description"
 , 
 	using 
-		message format application/xml , 
+		message format application/json , 
 		protocol HTTP , 
 	accepting any event . 
 	

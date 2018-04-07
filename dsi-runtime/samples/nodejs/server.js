@@ -14,21 +14,20 @@ const DSI_IN_URL = "https://" + DSI_HOST + ":9443/in/simple";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 function createEventNew(name) {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-               + "<m:CreatePerson xmlns:m=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model ../xsd/namespace1/model.xsd \">"
-               + "<m:name>" + name + "</m:name>"
-               + "<m:description>"
-               + "</m:description>"
-               + "</m:CreatePerson>";
+        return { "$class": "simple.CreatePerson",
+                 "name": name,
+                 "description": ""
+               };
 }
 
 function createEventHello(name) {
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-               + "<m:SayHello xmlns:m=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.ibm.com/ia/xmlns/default/SimpleSolution/model ../xsd/namespace1/model.xsd \">"
-               + "<m:person>" + name + "</m:person>"
-               + "<m:description>"
-               + "</m:description>"
-               + "</m:SayHello>";
+        return {
+                        "$class": "simple.SayHello",
+                        "person": {
+                                        "key": name,
+                                        "type": "simple.Person"
+                                }
+                };
 }
 
 function sendEvent(evt) {
@@ -38,9 +37,9 @@ function sendEvent(evt) {
                 url: DSI_IN_URL,
                 method: 'POST',
                 headers: {
-                        'Content-Type' : 'application/xml'
+                        'Content-Type' : 'application/json'
                 },
-                body: evt
+                body: JSON.stringify(evt)
             },
             function (err, response, body) {
                 if (err) {
@@ -82,7 +81,7 @@ app.post("/create-person",
                         console.log("Emit: " + msg);
                         io.sockets.emit('message', msg );
                 });
-                        res.status(200).end();
+                res.status(200).end();
         });
 
 /**

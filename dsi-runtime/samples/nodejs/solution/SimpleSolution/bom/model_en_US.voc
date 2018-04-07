@@ -11,9 +11,12 @@ simple.CreatePerson.timestamp#phrase.navigation = {timestamp} of {this}
 
 # simple.Message
 simple.Message#concept.label = message
-simple.Message.Message(java.lang.String,java.time.ZonedDateTime)#phrase.navigation = a new {message} where {0, name} {1, timestamp} 
-simple.Message.name#phrase.action = set the name of {this} to {name}
-simple.Message.name#phrase.navigation = {name} of {this}
+simple.Message.Message(java.lang.String,simple.Person,java.time.ZonedDateTime)#phrase.navigation = a new {message} where {0, description} {1, person} {2, timestamp} 
+simple.Message.description#phrase.action = set the description of {this} to {description}
+simple.Message.description#phrase.navigation = {description} of {this}
+simple.Message.person#phrase.action = set the person of {this} to {person}
+simple.Message.person#phrase.clearer = clear the person of {this}
+simple.Message.person#phrase.navigation = {person} of {this}
 simple.Message.timestamp#phrase.action = set the timestamp of {this} to {timestamp}
 simple.Message.timestamp#phrase.navigation = {timestamp} of {this}
 
