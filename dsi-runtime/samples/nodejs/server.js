@@ -14,9 +14,10 @@ const DSI_IN_URL = "https://" + DSI_HOST + ":9443/in/simple";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 function createEventNew(name) {
-        return { "$class": "simple.CreatePerson",
-                 "name": name,
-                 "description": ""
+        return {
+                        "$class": "simple.CreatePerson",
+                        "name": name,
+                        "description": ""
                };
 }
 
