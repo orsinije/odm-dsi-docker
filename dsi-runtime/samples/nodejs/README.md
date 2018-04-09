@@ -34,9 +34,33 @@ displayed after `Event received` in the HTML page.
 
 ### Send events from NodeJS to DSI
 
-The form in the [HTML page](pub/index.html) sends an HTTP POST to the
-NodeJS application. In [server.js](./server.js), the method `sendEvent`
-sends the event to DSI using its HTTP inbound connectivity feature.
+The form in the HTML page ([index.html](pub/index.html)) sends an HTTP POST to the NodeJS application ([server.js](./server.js)).
+
+The methods `createEventNew` and `createEventHello` create the event
+as a JSON object:
+```
+function createEventHello(name) {
+        return {
+                        "$class": "simple.SayHello",
+                        "person": {
+                                        "key": name,
+                                        "type": "simple.Person"
+                                }
+                };
+}
+```
+
+The method `sendEvent` sends the event to DSI using its HTTP inbound connectivity feature:
+```
+request.post({
+        url: DSI_IN_URL,
+        method: 'POST',
+        headers: {
+                'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(evt)
+    },
+```
 
 ### Receive events in NodeJS from DSI
 
