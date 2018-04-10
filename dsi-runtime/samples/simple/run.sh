@@ -54,4 +54,5 @@ cd $SRC_DIR
 ./create_person.sh localhost john.doe
 
 echo "Waiting 5s before verifying that the entity has been created"
+sleep 5
 ./person_get.sh john.doe json
